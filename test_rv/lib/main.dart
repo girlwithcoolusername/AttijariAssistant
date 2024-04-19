@@ -10,21 +10,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
-  runApp(MyApp(sharedPreferences: sharedPreferences));
+  runApp(MyApp());
 }
 
 
 class MyApp extends StatelessWidget {
-  final SharedPreferences sharedPreferences;
 
-  const MyApp({Key? key, required this.sharedPreferences}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: ((context) => AuthProvider(sharedPreferences)),
+          create: ((context) => AuthProvider()),
         ),
       ],
       child: MaterialApp(

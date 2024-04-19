@@ -1,15 +1,23 @@
-import '../services/auth_service.dart';
+import 'package:flutter/material.dart';
 
-class AuthController {
-  final AuthService _authService;
+import '../providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
-  AuthController(this._authService);
 
-  Future<bool> login(String username, String password) async {
-    return await _authService.login(username, password);
+class AuthController extends StatelessWidget {
+  final Widget child;
+
+  const AuthController({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => AuthProvider(),
+      child: child,
+    );
+  }
+
+  static AuthProvider of(BuildContext context, {bool listen = true}) {
+    return Provider.of<AuthProvider>(context, listen: listen);
   }
 }
-
-
-
-

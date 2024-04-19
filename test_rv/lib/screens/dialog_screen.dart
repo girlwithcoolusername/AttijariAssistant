@@ -10,16 +10,16 @@ import '../theme.dart';
 
 import '../utils/text_to_voice.dart';
 
-class SpeechScreen extends StatefulWidget {
-  const SpeechScreen({Key? key});
+class DialogScreen extends StatefulWidget {
+  const DialogScreen({Key? key});
 
-  static String routeName = "/SpeechScreen";
+  static String routeName = "/DialogScreen";
 
   @override
-  State<SpeechScreen> createState() => _SpeechScreenState();
+  State<DialogScreen> createState() => _DialogScreenState();
 }
 
-class _SpeechScreenState extends State<SpeechScreen> {
+class _DialogScreenState extends State<DialogScreen> {
   final speechToText = SpeechToText();
   final flutterTts = FlutterTts();
   double _confidenceLevel = 0;
@@ -91,7 +91,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
     return Scaffold(
       appBar: buildCustomAppBar(context, "Page des commandes"),
       body: Container(
-        decoration: const BoxDecoration(gradient: kPrimaryGradientColor),
+        // decoration: const BoxDecoration(gradient: kPrimaryGradientColor),
         child: Center(
           child: Column(
             children: [
@@ -142,7 +142,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
             vertical: getProportionateScreenHeight(150.0)),
         child: AvatarGlow(
           startDelay: const Duration(milliseconds: 1000),
-          glowColor: kPaletteColor,
+          glowColor: Colors.blueGrey,
           glowShape: BoxShape.circle,
           animate: speechToText.isListening,
           curve: Curves.fastOutSlowIn,

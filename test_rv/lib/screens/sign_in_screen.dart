@@ -4,12 +4,12 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:test_rv/components/size_config.dart';
 import 'package:test_rv/constants.dart';
 import 'package:test_rv/screens/biometrics_screen.dart';
-import 'package:test_rv/screens/test_screen.dart';
 import 'package:test_rv/utils/text_to_voice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../theme.dart';
+import 'dialog_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -103,59 +103,27 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _verifyCredentials() async {
     if (_answers.length >= _questions.length -1) {
-      if (_answers[0] == "admin" && _answers[1] == "password") {
-        print(
-            "Nom d'utilisateur: ${_answers[0]}, Mot de passe: ${_answers[1]}");
-        await TextToVoice.speak(_questions[2]);
-        await Future.delayed(Duration(seconds: 3));
-        if(_answers.length >_questions.length -1){
-          if(_answers[_questions.length-1].toLowerCase().contains("oui"))
-          {
-            _saveCredentials();
-          }
-          await TextToVoice.speak(
-              "Authentification réussie. Redirection vers l'écran suivant");
-          await Future.delayed(Duration(seconds: 3));
-          Navigator.pushNamed(context, TestScreen.routeName);
-          _resetState();
-        }
-      } else {
-        _failedAttempts++;
-        if (_failedAttempts >= _maxAttempts) {
-          await TextToVoice.speak(
-              "Nombre maximal de tentatives échouées atteint.");
-          await Future.delayed(Duration(seconds: 3));
-          Navigator.pushNamed(context, BiometricsScreen.routeName);
-        } else {
-          await TextToVoice.speak(
-              "Identifiants incorrects. Tentative ${_failedAttempts} sur ${_maxAttempts}.Réessayez!");
-          _resetState();
-        }
-      }
-    }
-  }
-  void _verifyCredentialsAvecAPI() async {
-    if (_answers.length >= _questions.length -1) {
-      final username = _answers[0];
-      final password = _answers[1];
+      final username = _answers[0].toLowerCase();
+      final password = _answers[1].toLowerCase();
 
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-      final isAuthenticated = await authProvider.login(username, password);
+      final currentUser = await authProvider.login(username, password);
+      print(currentUser!.userId);
 
-      if (isAuthenticated) {
+      if (currentUser !=null) {
         await TextToVoice.speak(_questions[2]);
-        await Future.delayed(Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 3));
 
         if (_answers.length > _questions.length - 1) {
           if (_answers[_questions.length - 1].toLowerCase().contains("oui")) {
-            await authProvider.saveCredentials(username, password);
+            await authProvider.saveCredentials(username, password,currentUser.userId);
           }
           await TextToVoice.speak(
             "Authentification réussie. Redirection vers l'écran suivant",
           );
           await Future.delayed(Duration(seconds: 3));
-          Navigator.pushNamed(context, TestScreen.routeName);
+          Navigator.pushNamed(context, DialogScreen.routeName);
           _resetState();
         }
       } else {
@@ -195,9 +163,6 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: buildCustomAppBar(context, "Page d'authentification"),
       body: Container(
-        decoration: const BoxDecoration(
-            gradient:kPrimaryGradientColor
-        ),
         child: Center(
           child: Column(
             children: [
@@ -248,7 +213,7 @@ class _SignInScreenState extends State<SignInScreen> {
             vertical: getProportionateScreenHeight(150.0)),
         child: AvatarGlow(
           startDelay: const Duration(milliseconds: 1000),
-          glowColor: kPaletteColor,
+          glowColor: Colors.grey,
           glowShape: BoxShape.circle,
           animate: _speechToText.isListening,
           curve: Curves.fastOutSlowIn,
