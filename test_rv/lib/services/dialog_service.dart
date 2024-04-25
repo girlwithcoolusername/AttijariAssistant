@@ -6,16 +6,13 @@ class DialogService {
   Future<String> getDialog(String message) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('userId');
-    String? token = prefs.getString('token');
 
     if (userId == null) {
       return 'User ID not found in preferences';
     }
-
+    print(userId);
     var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+      'Content-Type': 'application/json'};
     var request = http.Request(
       'POST',
       Uri.parse('http://192.168.100.35:8000/'),

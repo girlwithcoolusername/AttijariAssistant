@@ -145,11 +145,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
 
-  Future<void> _saveCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("username", _answers[0]);
-    await prefs.setString("password", _answers[1]);
-  }
 
   void _resetState() {
     _currentQuestionIndex = 0;
@@ -160,76 +155,79 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildCustomAppBar(context, "Page d'authentification"),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  _speechToText.isListening
-                      ? "écoute..."
-                      : _speechEnabled
-                      ? "Appuyez sur le microphone pour commencer à écouter..."
-                      : "Speech non disponible",
-                  style: const TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Container(
+    return GestureDetector(
+      onTap: _speechToText.isListening ? _stopListening : _startListening,
+      child: Scaffold(
+        appBar: buildCustomAppBar(context, "Page d'authentification"),
+        body: Container(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    _wordsSpoken,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w300,
+                    _speechToText.isListening
+                        ? "écoute..."
+                        : _speechEnabled
+                        ? "Appuyez sur le microphone pour commencer à écouter..."
+                        : "Speech non disponible",
+                    style: const TextStyle(fontSize: 20.0),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      _wordsSpoken,
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (_speechToText.isNotListening && _confidenceLevel > 0)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 100,
-                  ),
-                  child: Text(
-                    "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w200,
+                if (_speechToText.isNotListening && _confidenceLevel > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 100,
                     ),
-                  ),
-                )
-            ],
+                    child: Text(
+                      "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(120.0),
-            vertical: getProportionateScreenHeight(150.0)),
-        child: AvatarGlow(
-          startDelay: const Duration(milliseconds: 1000),
-          glowColor: Colors.grey,
-          glowShape: BoxShape.circle,
-          animate: _speechToText.isListening,
-          curve: Curves.fastOutSlowIn,
-          child: SizedBox(
-            width: getProportionateScreenWidth(110),
-            height: getProportionateScreenHeight(110),
-            child: FloatingActionButton(
-              shape: CircleBorder(),
-              onPressed:
-              _speechToText.isListening ? _stopListening : _startListening,
-              tooltip: 'Ecouter',
-              backgroundColor: kPrimaryColor,
-              child: Icon(
-                  _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-                  color: Colors.white,
-                  size: 35),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(120.0),
+              vertical: getProportionateScreenHeight(150.0)),
+          child: AvatarGlow(
+            startDelay: const Duration(milliseconds: 1000),
+            glowColor: Colors.grey,
+            glowShape: BoxShape.circle,
+            animate: _speechToText.isListening,
+            curve: Curves.fastOutSlowIn,
+            child: SizedBox(
+              width: getProportionateScreenWidth(110),
+              height: getProportionateScreenHeight(110),
+              child: FloatingActionButton(
+                shape: CircleBorder(),
+                onPressed:
+                _speechToText.isListening ? _stopListening : _startListening,
+                tooltip: 'Ecouter',
+                backgroundColor: kPrimaryColor,
+                child: Icon(
+                    _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+                    color: Colors.white,
+                    size: 35),
+              ),
             ),
           ),
         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_rv/components/size_config.dart';
+import 'package:test_rv/screens/dialog_screen.dart';
 import 'package:test_rv/screens/sign_in_screen.dart';
-import 'package:test_rv/screens/speech_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import '../utils/authentication.dart';
 import '../utils/text_to_voice.dart';
@@ -28,9 +28,17 @@ class _BiometricsScreenState extends State<BiometricsScreen> {
 
   Future<void> _authenticate(BuildContext context) async {
     bool auth = await Authentication.authentication(context);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? userId = prefs.getInt('userId');
     if (auth) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, SignInScreen.routeName);
+      if(userId !=null){
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, DialogScreen.routeName);
+      }
+      else{
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, SignInScreen.routeName);
+      }
     }
   }
 
