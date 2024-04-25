@@ -3,13 +3,12 @@ import 'package:test_rv/providers/auth_provider.dart';
 import 'package:test_rv/routes.dart';
 import 'package:test_rv/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:test_rv/services/disable_accessibility_services.dart';
 import 'package:test_rv/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize SharedPreferences
-  final sharedPreferences = await SharedPreferences.getInstance();
+  disableAccessibilityServices();
   runApp(MyApp());
 }
 

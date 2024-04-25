@@ -40,7 +40,8 @@ class Authentication {
       print("error$e");
       TextToVoice.speak(
           "Une erreur s'est produite lors de l'authentification. Veuillez réessayer.");
-      await _showPinDialog(context);
+      Navigator.pushReplacement(context, newRoute)
+      // await _showPinDialog(context);
       return false;
     }
   }

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:test_rv/components/size_config.dart';
 import 'package:test_rv/constants.dart';
 import 'package:test_rv/screens/biometrics_screen.dart';
 import 'package:test_rv/utils/text_to_voice.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../components/description.dart';
+import '../components/logo_and_user_prompt.dart';
+import '../components/mic_button.dart';
 import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import '../theme.dart';
 import 'dialog_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -69,14 +70,14 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  void _startListening() async {
+  Future<void> _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {
       _confidenceLevel = 0;
     });
   }
 
-  void _stopListening() async {
+  Future<void> _stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
@@ -155,80 +156,78 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: _speechToText.isListening ? _stopListening : _startListening,
       child: Scaffold(
-        appBar: buildCustomAppBar(context, "Page d'authentification"),
-        body: Container(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    _speechToText.isListening
-                        ? "écoute..."
-                        : _speechEnabled
-                        ? "Appuyez sur le microphone pour commencer à écouter..."
-                        : "Speech non disponible",
-                    style: const TextStyle(fontSize: 20.0),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      _wordsSpoken,
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
-                ),
-                if (_speechToText.isNotListening && _confidenceLevel > 0)
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 100,
-                    ),
-                    child: Text(
-                      "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                  )
-              ],
+        // each product have a color
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          elevation: 0,
+          leading: IconButton(
+            icon: SvgPicture.asset(
+              'assets/icons/Back Icon.svg',
+              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
             ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text(
+            "Page d'authentification",
+            textAlign: TextAlign.end,
+            style: TextStyle(color: Colors.white),
           ),
         ),
-        floatingActionButton: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(120.0),
-              vertical: getProportionateScreenHeight(150.0)),
-          child: AvatarGlow(
-            startDelay: const Duration(milliseconds: 1000),
-            glowColor: Colors.grey,
-            glowShape: BoxShape.circle,
-            animate: _speechToText.isListening,
-            curve: Curves.fastOutSlowIn,
-            child: SizedBox(
-              width: getProportionateScreenWidth(110),
-              height: getProportionateScreenHeight(110),
-              child: FloatingActionButton(
-                shape: CircleBorder(),
-                onPressed:
-                _speechToText.isListening ? _stopListening : _startListening,
-                tooltip: 'Ecouter',
-                backgroundColor: kPrimaryColor,
-                child: Icon(
-                    _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-                    color: Colors.white,
-                    size: 35),
-              ),
-            ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: size.height,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: size.height * 0.3),
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.12,
+                        left: kDefaultPaddin,
+                        right: kDefaultPaddin,
+                      ),
+                      // height: 500,
+                      decoration: const BoxDecoration(
+                        gradient: kPrimaryGradientColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
+                        ),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Description(generatedContent: null),
+                          const SizedBox(height: kDefaultPaddin / 2),
+                          const SizedBox(height: kDefaultPaddin / 2),
+                          MicButton(isListening: _speechToText.isListening, isNotListening: _speechToText.isNotListening, startListening: _startListening, stopListening: _stopListening),
+                          if (!_speechToText.isListening && _confidenceLevel > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 100,
+                              ),
+                              child: Text(
+                                "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                    LogoAndUserPrompt(isListening: _speechToText.isListening, isAvailable: _speechToText.isAvailable, lastWords: _wordsSpoken)
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),

@@ -12,16 +12,16 @@ import 'package:test_rv/constants.dart';
 import '../services/dialog_service.dart';
 import '../utils/text_to_voice.dart';
 
-class DialogScreen extends StatefulWidget {
-  const DialogScreen({super.key});
+class TestNewDesignedScreen extends StatefulWidget {
+  const TestNewDesignedScreen({super.key});
 
   static String routeName = "/TestDetailsScreen";
 
   @override
-  State<DialogScreen> createState() => _DialogScreenState();
+  State<TestNewDesignedScreen> createState() => _TestNewDesignedScreenState();
 }
 
-class _DialogScreenState extends State<DialogScreen> {
+class _TestNewDesignedScreenState extends State<TestNewDesignedScreen> {
   final speechToText = SpeechToText();
   final flutterTts = FlutterTts();
   double _confidenceLevel = 0;
@@ -146,7 +146,7 @@ class _DialogScreenState extends State<DialogScreen> {
                                 style: const TextStyle(
                                   fontSize: 30,
                                   color: Colors.blueGrey,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             )
