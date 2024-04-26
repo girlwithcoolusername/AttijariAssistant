@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
 
@@ -49,10 +50,11 @@ class LogoAndUserPrompt extends StatelessWidget {
                         ..rotateY(0.5) // Rotate around Y-axis
                         ..rotateZ(0.07), // Rotate around Z-axis
                       alignment: FractionalOffset.center,
-                      child: Image.asset(
-                        "assets/images/attijariwafa-bank-logo.webp",
-                        width: 350,
-                        height: 250,
+                      child: SvgPicture.asset(
+                        "assets/icons/banknote.svg",
+                        width: 450,
+                        height: 300,
+                        color: Colors.blueGrey,
                       ),
                     ),
                   ),

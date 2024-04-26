@@ -1,49 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:test_rv/utils/text_to_voice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/dialog_screen.dart';
+import '../screens/sign_in_screen.dart';
+
 
 class Authentication {
-  static final _auth = LocalAuthentication();
+  static final LocalAuthentication _auth = LocalAuthentication();
 
+  // Vérifie si le dispositif supporte l'authentification biométrique
   static Future<bool> canAuthenticate() async =>
-      await _auth.canCheckBiometrics || await _auth.isDeviceSupported();
+      await _auth.canCheckBiometrics && await _auth.isDeviceSupported();
 
-  static Future<bool> authentication(BuildContext context) async {
+  static Future<bool> authenticate(BuildContext context) async {
+    if (!await canAuthenticate()) {
+      return _handleUnsupportedDevice(context);
+    }
+    return _authenticate(context);
+  }
+
+  static Future<bool> _authenticate(BuildContext context) async {
     try {
-      if (!await canAuthenticate()) {
-        // Si l'authentification par empreinte digitale n'est pas possible
-        TextToVoice.speak(
-            "Votre appareil ne prend pas en charge l'authentification par empreinte digitale.");
-        // Afficher le dialogue demandant le code PIN
-        await _showPinDialog(context);
-        return false;
-      }
-
-      // L'authentification par empreinte digitale est possible, procédez à l'authentification
-      TextToVoice.speak(
-          "Veuillez placer votre doigt sur le capteur d'empreintes digitales.");
-
       bool isAuthenticated = await _auth.authenticate(
         localizedReason:
-            "Veuillez placer votre doigt sur le capteur d'empreintes digitales.",
+        "Veuillez placer votre doigt sur le capteur d'empreintes digitales",
       );
 
       if (isAuthenticated) {
-        TextToVoice.speak(
-            "Authentification réussie. Accès autorisé à l'application.");
+        TextToVoice.speak("Authentification réussie. Accès autorisé à l'application.");
       } else {
         TextToVoice.speak("Échec de l'authentification. Veuillez réessayer.");
       }
-
       return isAuthenticated;
     } catch (e) {
-      print("error$e");
-      TextToVoice.speak(
-          "Une erreur s'est produite lors de l'authentification. Veuillez réessayer.");
-      Navigator.pushReplacement(context, newRoute)
-      // await _showPinDialog(context);
+      print("Authentication error: $e");
+      TextToVoice.speak("Une erreur s'est produite lors de l'authentification. Veuillez réessayer.");
       return false;
     }
+  }
+
+  static Future<bool> _handleUnsupportedDevice(BuildContext context) async {
+    TextToVoice.speak("Votre appareil ne prend pas en charge l'authentification par empreinte digitale.");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? userId = prefs.getInt('userId');
+    Navigator.pushNamed(
+      context,
+      userId != null ? DialogScreen.routeName : SignInScreen.routeName,
+    );
+    return false;
   }
 
   static Future<void> _showPinDialog(BuildContext context) async {

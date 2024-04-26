@@ -4,7 +4,6 @@ import 'package:test_rv/components/size_config.dart';
 import 'package:test_rv/screens/dialog_screen.dart';
 import 'package:test_rv/screens/sign_in_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_rv/screens/test_dialog_screen.dart';
 import '../constants.dart';
 import '../utils/authentication.dart';
 import '../utils/text_to_voice.dart';
@@ -28,13 +27,13 @@ class _BiometricsScreenState extends State<BiometricsScreen> {
   }
 
   Future<void> _authenticate(BuildContext context) async {
-    bool auth = await Authentication.authentication(context);
+    bool auth = await Authentication.authenticate(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('userId');
     if (auth) {
       if(userId !=null){
         // ignore: use_build_context_synchronously
-        Navigator.pushNamed(context, TestNewDesignedScreen.routeName);
+        Navigator.pushNamed(context, DialogScreen.routeName);
       }
       else{
         // ignore: use_build_context_synchronously

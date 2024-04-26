@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test_rv/constants.dart';
 
-import '../models/product.dart';
 
 class MicButton extends StatelessWidget {
   const MicButton({super.key, required this.isListening, required this.isNotListening, required this.startListening, required this.stopListening});

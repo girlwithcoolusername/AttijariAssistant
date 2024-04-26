@@ -15,7 +15,7 @@ class Description extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kDefaultPaddin / 2),
       child: Text(
-        generatedContent ?? "Attijariwafa Bank : Croire en vous, c'est mettre vos ambitions au cœur de nos priorités.",
+        generatedContent ?? "Bienvenue chez Attijariwafa Bank, où votre avenir et vos ambitions sont au cœur de nos préoccupations, parce que croire en vous et soutenir chaque étape de votre parcours financier est notre engagement le plus sincère.",
         style: TextStyle(height: 1.5, fontSize: 15),
       ),
     );

@@ -204,7 +204,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         children: <Widget>[
                           Description(generatedContent: null),
                           const SizedBox(height: kDefaultPaddin / 2),
-                          const SizedBox(height: kDefaultPaddin / 2),
+                          const SizedBox(height: kDefaultPaddin / 8),
                           MicButton(isListening: _speechToText.isListening, isNotListening: _speechToText.isNotListening, startListening: _startListening, stopListening: _stopListening),
                           if (!_speechToText.isListening && _confidenceLevel > 0)
                             Padding(

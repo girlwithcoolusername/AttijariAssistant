@@ -3,10 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DialogService {
-  Future<String> getDialog(String message) async {
+  Future<Object> getDialog(String message) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('userId');
-
+    // userId ??= userIdProvider;
+    // if (userId == null && userIdProvider == null) {
+    //   return 'User ID not found in preferences';
+    // }
     if (userId == null) {
       return 'User ID not found in preferences';
     }
@@ -30,7 +33,9 @@ class DialogService {
       final jsonData = jsonDecode(responseBody);
       // Extract the value associated with the "response" key
       final jsonResponse = jsonData['response'];
-      return jsonResponse != null ? jsonResponse.toString() : 'Response not found';
+      print(jsonResponse);
+      // return jsonResponse != null ? jsonResponse.toString() : 'Response not found';
+      return jsonResponse ?? 'Response not found';
     } else {
       final reasonPhrase = await response.reasonPhrase.toString();
       return reasonPhrase;

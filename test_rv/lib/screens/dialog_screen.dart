@@ -8,6 +8,7 @@ import 'package:test_rv/components/description.dart';
 import 'package:test_rv/components/logo_and_user_prompt.dart';
 import 'package:test_rv/components/mic_button.dart';
 import 'package:test_rv/constants.dart';
+import 'package:test_rv/screens/google_maps_screen.dart';
 
 import '../services/dialog_service.dart';
 import '../utils/text_to_voice.dart';
@@ -15,7 +16,7 @@ import '../utils/text_to_voice.dart';
 class DialogScreen extends StatefulWidget {
   const DialogScreen({super.key});
 
-  static String routeName = "/TestDetailsScreen";
+  static String routeName = "/DialogScreen";
 
   @override
   State<DialogScreen> createState() => _DialogScreenState();
@@ -68,10 +69,49 @@ class _DialogScreenState extends State<DialogScreen> {
 
     if (_confidenceLevel > 0.5) {
       dialogService.getDialog(lastWords).then((response) {
+        if (response == null) {
+          // Handle null response
+          setState(() {
+            TextToVoice.speak(
+                generatedContent ?? "Désolé ,une erreur s'est produite!");
+          });
+        } else if (response is String) {
+          // Handle response if it's just a string
+          setState(() {
+            generatedContent = response.toString();
+            TextToVoice.speak(generatedContent ??
+                "Désolé , veuillez reformuler s'il vous plaît!");
+          });
+        } else if (response is List &&
+            response.length == 2 &&
+            response[0] is String &&
+            response[1] is Map) {
+          // Handle response if it's a list with two elements: [String, Map]
+          setState(() {
+            generatedContent = response[0].toString();
+            TextToVoice.speak(generatedContent ??
+                "Désolé , veuillez reformuler s'il vous plaît!");
+          });
+          // Optionally navigate to another screen with the map data
+          Navigator.pushNamed(
+            context,
+            GoogleMapsScreen.routeName,
+            arguments: response[1],
+          );
+        } else {
+          // Handle unexpected response format
+          setState(() {
+            generatedContent = "Désolé ,une erreur s'est produite!";
+            TextToVoice.speak(generatedContent ??
+                "Désolé , veuillez reformuler s'il vous plaît!");
+          });
+        }
+      }).catchError((error) {
+        // Handle errors like network issues, JSON parsing errors, etc.
         setState(() {
-          generatedContent = response;
+          generatedContent = "Désolé ,une erreur s'est produite! $error";
           TextToVoice.speak(generatedContent ??
-              "Désolé, veuillez reformuler s'il vous plaît.");
+              "Désolé , veuillez reformuler s'il vous plaît!");
         });
       });
     }
@@ -132,10 +172,16 @@ class _DialogScreenState extends State<DialogScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
-                          Description(generatedContent: generatedContent,),
+                          Description(
+                            generatedContent: generatedContent,
+                          ),
                           const SizedBox(height: kDefaultPaddin / 2),
                           const SizedBox(height: kDefaultPaddin / 2),
-                          MicButton(isListening: speechToText.isListening, isNotListening: speechToText.isNotListening, startListening: startListening, stopListening: stopListening),
+                          MicButton(
+                              isListening: speechToText.isListening,
+                              isNotListening: speechToText.isNotListening,
+                              startListening: startListening,
+                              stopListening: stopListening),
                           if (!speechToText.isListening && _confidenceLevel > 0)
                             Padding(
                               padding: const EdgeInsets.only(
@@ -153,7 +199,10 @@ class _DialogScreenState extends State<DialogScreen> {
                         ],
                       ),
                     ),
-                    LogoAndUserPrompt(isListening: speechToText.isListening, isAvailable: speechToText.isAvailable, lastWords: lastWords)
+                    LogoAndUserPrompt(
+                        isListening: speechToText.isListening,
+                        isAvailable: speechToText.isAvailable,
+                        lastWords: lastWords)
                   ],
                 ),
               )
