@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_rv/components/description.dart';
 import 'package:test_rv/components/logo_and_user_prompt.dart';
 import 'package:test_rv/components/mic_button.dart';
 import 'package:test_rv/constants.dart';
+import 'package:test_rv/providers/auth_provider.dart';
 import 'package:test_rv/screens/google_maps_screen.dart';
 
 import '../services/dialog_service.dart';
@@ -68,7 +70,10 @@ class _DialogScreenState extends State<DialogScreen> {
     });
 
     if (_confidenceLevel > 0.5) {
-      dialogService.getDialog(lastWords).then((response) {
+      AuthProvider? sp = context.read<AuthProvider>();
+      dialogService
+          .getDialog(lastWords, sp.currentUser!.userId)
+          .then((response) {
         if (response == null) {
           // Handle null response
           setState(() {
@@ -89,15 +94,16 @@ class _DialogScreenState extends State<DialogScreen> {
           // Handle response if it's a list with two elements: [String, Map]
           setState(() {
             generatedContent = response[0].toString();
-            TextToVoice.speak(generatedContent ??
-                "Désolé , veuillez reformuler s'il vous plaît!");
           });
-          // Optionally navigate to another screen with the map data
-          Navigator.pushNamed(
-            context,
-            GoogleMapsScreen.routeName,
-            arguments: response[1],
-          );
+          TextToVoice.speak(
+              "${generatedContent!}Vous êtes maintenant dirigé vers Google Maps pour démarrer l'itinéraire vers l'agence.", onDone: () {
+            // Navigate to another screen with the map data
+            Navigator.pushNamed(
+              context,
+              GoogleMapsScreen.routeName,
+              arguments: {'initialAddress': response[1]['adresse']},
+            );
+          });
         } else {
           // Handle unexpected response format
           setState(() {
@@ -137,7 +143,7 @@ class _DialogScreenState extends State<DialogScreen> {
           elevation: 0,
           leading: IconButton(
             icon: SvgPicture.asset(
-              'assets/icons/Back Icon.svg',
+              "assets/icons/Back Icon.svg",
               colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
             ),
             onPressed: () => Navigator.pop(context),

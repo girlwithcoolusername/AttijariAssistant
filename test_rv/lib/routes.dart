@@ -8,7 +8,7 @@ final Map<String, WidgetBuilder> routes = {
   BiometricsScreen.routeName: (context) => BiometricsScreen(),
   SignInScreen.routeName : (context) => SignInScreen(),
   DialogScreen.routeName : (context) => DialogScreen(),
-  GoogleMapsScreen.routeName : (context) => GoogleMapsScreen(initialAddress: '',),
+  GoogleMapsScreen.routeName: (context) => GoogleMapsScreen.fromContext(context),
 
 
 

@@ -57,7 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (hasPermission) {
       if (_firstopen) {
         await TextToVoice.speak(
-            "Authentification réussie. Appuyer sur le bouton au milieu de l'écran pour activer ou désactiver le micro");
+            "Authentification réussie. Appuyer sur l'écran pour activer ou désactiver le micro");
         _firstopen = false;
         await Future.delayed(Duration(seconds: 8));
       }
@@ -110,9 +110,9 @@ class _SignInScreenState extends State<SignInScreen> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       final currentUser = await authProvider.login(username, password);
-      print(currentUser!.userId);
 
       if (currentUser !=null) {
+        print(currentUser!.userId);
         await TextToVoice.speak(_questions[2]);
         await Future.delayed(const Duration(seconds: 3));
 
@@ -167,7 +167,7 @@ class _SignInScreenState extends State<SignInScreen> {
           elevation: 0,
           leading: IconButton(
             icon: SvgPicture.asset(
-              'assets/icons/Back Icon.svg',
+              "assets/icons/Back Icon.svg",
               colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
             ),
             onPressed: () => Navigator.pop(context),
