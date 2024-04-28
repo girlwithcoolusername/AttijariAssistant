@@ -150,13 +150,18 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                 child: SizedBox(
                     width: double.infinity,
                     height: getProportionateScreenHeight(45),
-                    child: FloatingActionButton(
-                      onPressed: _launchNavigation,
-                      tooltip: 'Start Navigation',
-                      backgroundColor: Colors.orangeAccent,
-                      child: Text(
-                        "Démarrer l'itinéraire",
-                        style: TextStyle(color: Colors.white),
+                    child: Semantics(
+                      label: "Démarrer l'itinéraire",
+                      hint: "Appuyez sur ce bouton pour démarrer la navigation vers votre destination.",
+                      enabled: true,
+                      child: FloatingActionButton(
+                        onPressed: _launchNavigation,
+                        tooltip: 'Start Navigation',
+                        backgroundColor: Colors.orangeAccent,
+                        child: const Text(
+                          "Démarrer l'itinéraire",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ))),
           ),

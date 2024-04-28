@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../components/size_config.dart';
 import '../utils/text_to_voice.dart';
 import 'biometrics_screen.dart';
+import 'google_maps_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";
@@ -69,16 +70,19 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 20.0),
             const Center(
-              child: Text(
-                'Croire en vous!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+              child:ExcludeSemantics(
+                excluding: true, // Set to false to include the button in the semantics tree
+                child: Text(
+                  'Croire en vous!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 ),
               ),
-            ),
             const Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
