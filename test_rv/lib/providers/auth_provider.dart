@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import '../models/utilisateur.dart';
 import '../services/auth_service.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authService = AuthService();
+  final AuthService _authService;
+  final SharedPreferences _prefs;
   Utilisateur? _currentUser;
+  AuthProvider(this._authService, this._prefs);
 
   Utilisateur? get currentUser => _currentUser;
 
@@ -25,10 +26,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> saveCredentials(String username, String password,int userid) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', username);
-    await prefs.setInt('userId', userid);
-    await prefs.setString('password', password);
+    await _prefs.setString('username', username);
+    await _prefs.setInt('userId', userid);
+    await _prefs.setString('password', password);
   }
 
   Future<void> logout() async {
@@ -38,15 +38,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> clearCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('username');
-    await prefs.remove('password');
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    await _prefs.remove('username');
+    await _prefs.remove('password');
   }
 
   Future<void> tryAutoLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final savedUsername = prefs.getString('username');
-    final savedPassword = prefs.getString('password');
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final savedUsername = _prefs.getString('username');
+    final savedPassword = _prefs.getString('password');
     if (savedUsername != null && savedPassword != null) {
       await login(savedUsername, savedPassword);
     }

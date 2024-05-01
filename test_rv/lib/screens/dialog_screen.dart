@@ -10,6 +10,7 @@ import 'package:test_rv/components/logo_and_user_prompt.dart';
 import 'package:test_rv/components/mic_button.dart';
 import 'package:test_rv/constants.dart';
 import 'package:test_rv/providers/auth_provider.dart';
+import 'package:test_rv/providers/dialog_provider.dart';
 import 'package:test_rv/screens/google_maps_screen.dart';
 
 import '../services/dialog_service.dart';
@@ -29,7 +30,6 @@ class _DialogScreenState extends State<DialogScreen> {
   final flutterTts = FlutterTts();
   double _confidenceLevel = 0;
   String lastWords = '';
-  final DialogService dialogService = DialogService();
   String? generatedContent;
   int start = 200;
   int delay = 200;
@@ -71,7 +71,8 @@ class _DialogScreenState extends State<DialogScreen> {
 
     if (_confidenceLevel > 0.5) {
       AuthProvider? sp = context.read<AuthProvider>();
-      dialogService
+      DialogProvider dialogProvider = context.read<DialogProvider>();
+      dialogProvider
           .getDialog(lastWords, sp.currentUser!.userId)
           .then((response) {
         if (response == null) {
