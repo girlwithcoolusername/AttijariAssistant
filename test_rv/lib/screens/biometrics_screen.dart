@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_rv/components/size_config.dart';
+import 'package:test_rv/size_config.dart';
 import 'package:test_rv/screens/dialog_screen.dart';
 import 'package:test_rv/screens/sign_in_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +56,7 @@ class _BiometricsScreenState extends State<BiometricsScreen> {
       onTap: _handleTap,
       child: Scaffold(
         body: DecoratedBox(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: kPrimaryGradientColor,
           ),
           child: SafeArea(

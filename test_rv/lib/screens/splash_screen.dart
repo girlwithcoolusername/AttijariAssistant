@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../components/size_config.dart';
+import '../size_config.dart';
 import '../utils/text_to_voice.dart';
 import 'biometrics_screen.dart';
 import 'google_maps_screen.dart';
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    SizeConfig.init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(

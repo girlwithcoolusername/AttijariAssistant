@@ -13,7 +13,6 @@ import 'package:test_rv/providers/auth_provider.dart';
 import 'package:test_rv/providers/dialog_provider.dart';
 import 'package:test_rv/screens/google_maps_screen.dart';
 
-import '../services/dialog_service.dart';
 import '../utils/text_to_voice.dart';
 
 class DialogScreen extends StatefulWidget {
@@ -75,44 +74,38 @@ class _DialogScreenState extends State<DialogScreen> {
       dialogProvider
           .getDialog(lastWords, sp.currentUser!.userId)
           .then((response) {
-        if (response == null) {
-          // Handle null response
-          setState(() {
-            TextToVoice.speak(
-                generatedContent ?? "Désolé ,une erreur s'est produite!");
-          });
-        } else if (response is String) {
-          // Handle response if it's just a string
-          setState(() {
-            generatedContent = response.toString();
-            TextToVoice.speak(generatedContent ??
-                "Désolé , veuillez reformuler s'il vous plaît!");
-          });
-        } else if (response is List &&
-            response.length == 2 &&
-            response[0] is String &&
-            response[1] is Map) {
-          // Handle response if it's a list with two elements: [String, Map]
-          setState(() {
-            generatedContent = response[0].toString();
-          });
-          TextToVoice.speak(
-              "${generatedContent!}Vous êtes maintenant dirigé vers Google Maps pour démarrer l'itinéraire vers l'agence.", onDone: () {
-            // Navigate to another screen with the map data
-            Navigator.pushNamed(
-              context,
-              GoogleMapsScreen.routeName,
-              arguments: {'initialAddress': response[1]['adresse']},
-            );
-          });
-        } else {
-          // Handle unexpected response format
-          setState(() {
-            generatedContent = "Désolé ,une erreur s'est produite!";
-            TextToVoice.speak(generatedContent ??
-                "Désolé , veuillez reformuler s'il vous plaît!");
-          });
-        }
+        if (response is String) {
+        // Handle response if it's just a string
+        setState(() {
+          generatedContent = response.toString();
+          TextToVoice.speak(generatedContent ??
+              "Désolé , veuillez reformuler s'il vous plaît!");
+        });
+      } else if (response is List &&
+          response.length == 2 &&
+          response[0] is String &&
+          response[1] is Map) {
+        // Handle response if it's a list with two elements: [String, Map]
+        setState(() {
+          generatedContent = response[0].toString();
+        });
+        TextToVoice.speak(
+            "${generatedContent!}Vous êtes maintenant dirigé vers Google Maps pour démarrer l'itinéraire vers l'agence.", onDone: () {
+          // Navigate to another screen with the map data
+          Navigator.pushNamed(
+            context,
+            GoogleMapsScreen.routeName,
+            arguments: {'initialAddress': response[1]['adresse']},
+          );
+        });
+      } else {
+        // Handle unexpected response format
+        setState(() {
+          generatedContent = "Désolé ,une erreur s'est produite!";
+          TextToVoice.speak(generatedContent ??
+              "Désolé , veuillez reformuler s'il vous plaît!");
+        });
+      }
       }).catchError((error) {
         // Handle errors like network issues, JSON parsing errors, etc.
         setState(() {
@@ -130,7 +123,6 @@ class _DialogScreenState extends State<DialogScreen> {
     speechToText.stop();
     flutterTts.stop();
   }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -145,7 +137,7 @@ class _DialogScreenState extends State<DialogScreen> {
           leading: IconButton(
             icon: SvgPicture.asset(
               "assets/icons/Back Icon.svg",
-              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
             ),
             onPressed: () => Navigator.pop(context),
           ),

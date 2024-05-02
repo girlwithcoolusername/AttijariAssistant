@@ -19,6 +19,13 @@ class Authentication {
     }
     return _authenticate(context);
   }
+  Future<bool> authenticateForTesting(BuildContext context) async {
+    if (!await canAuthenticate()) {
+      return _handleUnsupportedDevice(context);
+    }
+    return _authenticate(context);
+  }
+
 
   static Future<bool> _authenticate(BuildContext context) async {
     try {

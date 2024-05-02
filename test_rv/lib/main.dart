@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   final AuthService authService;
   final DialogService dialogService;
 
-  MyApp(
+   MyApp(
       {Key? key,
       required this.prefs,
       required this.authService,

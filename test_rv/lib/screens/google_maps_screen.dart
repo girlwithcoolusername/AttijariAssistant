@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../components/size_config.dart';
+import '../../size_config.dart';
 
 class GoogleMapsScreen extends StatefulWidget {
   static String routeName = "/MapsScreen";
@@ -64,6 +64,9 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
       if (locations.isNotEmpty) {
         Location location = locations.first;
         _selectedLatLng = LatLng(location.latitude, location.longitude);
+      }else {
+        // Handle the case where no location is found
+        print('No location found for the provided address');
       }
     }
     if (_selectedLatLng != null) {
@@ -72,6 +75,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
       _searchController.text = formattedAddress;
     }
   }
+
 
   void _launchNavigation() async {
     if (widget.initialAddress.isNotEmpty) {
