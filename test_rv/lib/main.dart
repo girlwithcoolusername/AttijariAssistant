@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           excluding: true,
           // Set to false to include the button in the semantics tree
           child: MaterialApp(
-            home:  SplashScreen(),
+            home:  VoiceSignInScreen(),
             debugShowCheckedModeBanner: false,
             theme: theme(),
             routes: routes,

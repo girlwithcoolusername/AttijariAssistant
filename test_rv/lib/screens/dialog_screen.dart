@@ -11,6 +11,7 @@ import 'package:test_rv/components/mic_button.dart';
 import 'package:test_rv/constants.dart';
 import 'package:test_rv/providers/auth_provider.dart';
 import 'package:test_rv/providers/dialog_provider.dart';
+import 'package:test_rv/providers/voice_auth_provider.dart';
 import 'package:test_rv/screens/google_maps_screen.dart';
 
 import '../utils/text_to_voice.dart';
@@ -70,6 +71,7 @@ class _DialogScreenState extends State<DialogScreen> {
 
     if (_confidenceLevel > 0.5) {
       AuthProvider? sp = context.read<AuthProvider>();
+      // VoiceAuthProvider? sp = context.read<VoiceAuthProvider>();
       DialogProvider dialogProvider = context.read<DialogProvider>();
       dialogProvider
           .getDialog(lastWords, sp.currentUser!.userId)
