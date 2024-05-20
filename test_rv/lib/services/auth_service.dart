@@ -42,7 +42,6 @@ class AuthService {
               'Content-Type': 'application/json',
             },
           );
-
           if (userInfoResponse.statusCode == 200) {
             return jsonDecode(userInfoResponse.body);
           } else {

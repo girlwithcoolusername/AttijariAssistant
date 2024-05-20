@@ -48,7 +48,7 @@ void main() {
     when(() => mockSpeechToText.isListening).thenReturn(false);
     when(() => mockSpeechToText.isAvailable).thenReturn(true);
     when(() => mockAuthProvider.currentUser)
-        .thenReturn(Utilisateur(userId: 123, username: '', password: ''));
+        .thenReturn(Utilisateur(userId: 123, username: '', password: '', voiceFeatures: []));
 
     await tester.pumpWidget(
       MultiProvider(

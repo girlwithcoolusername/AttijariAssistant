@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/test_rv/test_rv.iml" filepath="$PROJECT_DIR$/test_rv/test_rv.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test_rv/android/test_rv_android.iml" filepath="$PROJECT_DIR$/test_rv/android/test_rv_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AttijariAssistant.iml" filepath="$PROJECT_DIR$/.idea/AttijariAssistant.iml" />
     </modules>
   </component>
 </project>

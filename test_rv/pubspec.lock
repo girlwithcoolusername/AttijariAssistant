@@ -230,6 +230,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
+  flutter_sound:
+    dependency: "direct dev"
+    description:
+      name: flutter_sound
+      sha256: b833fb405bb8926411cf1294000066c5e0976477c5c9f39da547a369d99260f0
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.11"
+  flutter_sound_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_sound_platform_interface
+      sha256: "62756ed1be2ac0cb0499c1c7da496a97d20d116eb42a522df48306a37b374aad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.11"
+  flutter_sound_web:
+    dependency: transitive
+    description:
+      name: flutter_sound_web
+      sha256: b9f2cfd72aa21929cc3d9c0017fcdeb36bb07e95f5e4a698e040ca9bb7b47d2f
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.11"
   flutter_svg:
     dependency: "direct dev"
     description:
@@ -496,6 +520,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.10"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: af05cc8714f356fd1f3888fb6741cbe9fbe25cdb6eedbab80e1a6db21047d4a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   matcher:
     dependency: transitive
     description:
@@ -608,6 +640,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  percent_indicator:
+    dependency: "direct dev"
+    description:
+      name: percent_indicator
+      sha256: c37099ad833a883c9d71782321cb65c3a848c21b6939b6185f0ff6640d05814c
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.3"
   permission_handler:
     dependency: "direct dev"
     description:
@@ -696,6 +736,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  recase:
+    dependency: transitive
+    description:
+      name: recase
+      sha256: e4eb4ec2dcdee52dcf99cb4ceabaffc631d7424ee55e56f280bc039737f89213
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   shared_preferences:
     dependency: "direct dev"
     description:
@@ -752,6 +800,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  simple_circular_progress_bar:
+    dependency: "direct dev"
+    description:
+      name: simple_circular_progress_bar
+      sha256: e661ca942fbc617298e975b41fde19003d995de73ca6c2a1526c54d52f07151b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   sky_engine:
     dependency: transitive
     description: flutter
