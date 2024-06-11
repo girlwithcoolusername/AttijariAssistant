@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class VoiceBiometricService {
@@ -9,7 +10,7 @@ class VoiceBiometricService {
   static const String apiUserPassword = "password";
   static const String apiUserRole = "ADMIN";
 
-  Future<Map<String, dynamic>?> authenticateUserByVoicePrint(List<double> features) async {
+  Future<Map<String, dynamic>?> authenticateUserByVoicePrint(File audioFile) async {
     try {
       // Authenticate user to get token
       final loginResponse = await http.post(
@@ -27,28 +28,28 @@ class VoiceBiometricService {
         final token = loginData['token'];
         print('Token: $token');
 
-
-        final userInfoResponse = await http.post(
-          Uri.parse(apiUrl + authenticateEndpoint),
-          headers: {
+        // Prepare multipart request
+        var request = http.MultipartRequest('POST', Uri.parse(apiUrl + authenticateEndpoint))
+          ..headers.addAll({
             'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'features': features,
-          }),
-        );
+          })
+          ..files.add(await http.MultipartFile.fromPath('audio', audioFile.path));
 
-        if (userInfoResponse.statusCode == 200) {
-          return jsonDecode(userInfoResponse.body);
+        // Send request
+        var response = await request.send();
+
+        // Check response
+        if (response.statusCode == 200) {
+          // Read response body
+          var responseBody = await response.stream.bytesToString();
+          print(jsonDecode(responseBody));
+          return jsonDecode(responseBody);
         } else {
-          print('Failed to retrieve user info: ${userInfoResponse.body}');
-          print('Status Code: ${userInfoResponse.statusCode}');
+          print('Failed to authenticate user: ${response.reasonPhrase}');
           return null;
         }
       } else {
         print('Authentication failed: ${loginResponse.body}');
-        print('Status Code: ${loginResponse.statusCode}');
         return null;
       }
     } catch (e) {

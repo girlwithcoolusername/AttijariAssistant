@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:test_rv/screens/voice_signin_screen.dart';
 import '../size_config.dart';
 import '../utils/text_to_voice.dart';
 import 'biometrics_screen.dart';
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigateToNextScreen() async {
     Timer(const Duration(milliseconds: 13000), () {
-      Navigator.pushReplacementNamed(context, BiometricsScreen.routeName);
+      Navigator.pushReplacementNamed(context, VoiceSignInScreen.routeName);
     });
   }
 

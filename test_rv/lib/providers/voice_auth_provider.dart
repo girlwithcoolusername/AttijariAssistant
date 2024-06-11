@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:test_rv/services/voice_biometric_service.dart';
 import '../models/utilisateur.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 class VoiceAuthProvider extends ChangeNotifier {
   final VoiceBiometricService _authService;
@@ -13,8 +14,8 @@ class VoiceAuthProvider extends ChangeNotifier {
 
   Utilisateur? get currentUser => _currentUser;
 
-  Future<Utilisateur?> login(List<double> features) async {
-    final userInfo = await _authService.authenticateUserByVoicePrint(features);
+  Future<Utilisateur?> login(File audio) async {
+    final userInfo = await _authService.authenticateUserByVoicePrint(audio);
     if (userInfo != null) {
       _currentUser = Utilisateur.fromMap(userInfo);
       notifyListeners();

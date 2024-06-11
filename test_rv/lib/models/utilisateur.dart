@@ -3,16 +3,14 @@ class Utilisateur {
   final int userId;
   final String password;
   final bool isLoggedIn;
-  final List<double> voiceFeatures;
 
-  Utilisateur({required this.voiceFeatures,required this.userId, required this.username, required this.password, this.isLoggedIn = false});
+  Utilisateur({required this.userId, required this.username, required this.password, this.isLoggedIn = false});
 
   factory Utilisateur.fromMap(Map<String, dynamic> json) {
     return Utilisateur(
       userId: json['idUser'] as int,
       username: json['username'] as String,
       password: json['password'] as String,
-      voiceFeatures: List<double>.from(json['voiceFeatures'].map((x) => x.toDouble())),
       isLoggedIn: json.containsKey('isLoggedIn') ? json['isLoggedIn'] as bool : false,
     );
   }

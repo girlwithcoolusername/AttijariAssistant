@@ -70,8 +70,8 @@ class _DialogScreenState extends State<DialogScreen> {
     });
 
     if (_confidenceLevel > 0.5) {
-      AuthProvider? sp = context.read<AuthProvider>();
-      // VoiceAuthProvider? sp = context.read<VoiceAuthProvider>();
+      // AuthProvider? sp = context.read<AuthProvider>();
+      VoiceAuthProvider? sp = context.read<VoiceAuthProvider>();
       DialogProvider dialogProvider = context.read<DialogProvider>();
       dialogProvider
           .getDialog(lastWords, sp.currentUser!.userId)
